@@ -1,0 +1,38 @@
+#!/usr/bin/env zsh
+
+# Stop script execution on any errors
+set -euE -o pipefail
+
+USAGE="
+
+Usage: $(basename $0) ACTION [OPTIONS]
+
+ACTIONS:
+  install                       Installs development tools
+  help                          Prints this usage menu
+
+Global Options:
+  --config                      Path to the configuration file (default: vulcan-config.yml)
+  --log-level                   The log level (default INFO)
+  --dry-run                     Flag to indicate that the install is just a dry-run
+"
+
+# Imports
+DIR="$( cd "$( dirname "${(%):-%x}" )" >/dev/null 2>&1 && pwd )"
+source ${DIR}/lib/install.sh
+
+# Arguments
+ACTION=$(parse_arg 'ACTION' 1 'install' "$@")
+DRY_RUN=$(parse_long_opt 'dry-run' 'true' "$@")
+CONFIG=$(parse_long_opt 'config' '' "$@")
+CONFIG=${CONFIG:-"vulcan-config.yml"}
+LOGLEVEL=$(parse_long_opt 'log-level' '' "$@")
+LOGLEVEL=${LOGLEVEL:-"INFO"}
+
+# Run the desired command
+
+case "${ACTION}" in
+    install)
+        install_from_config "${CONFIG}"
+        ;;
+esac
