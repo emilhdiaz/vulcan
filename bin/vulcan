@@ -18,8 +18,8 @@ Global Options:
 "
 
 # Imports
-DIR="$( cd "$( dirname "${(%):-%x}" )" >/dev/null 2>&1 && pwd )"
-source ${DIR}/lib/install.sh
+DIR="$(dirname "$(greadlink -f "$0")")"
+source ${DIR}/../libexec/install.sh
 
 # Arguments
 ACTION=$(parse_arg 'ACTION' 1 'install' "$@")

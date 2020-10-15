@@ -70,8 +70,8 @@ darwin_install_or_upgrade_package() {
     return
   fi
 
-  local INSTALL_SCRIPT="${INSTALLERS_DIR}/../../packages/${INSTALLER}/$(echo ${PROGRAM} | sed -e 's/\//_/')-install.sh"
-  local CONFIGURE_SCRIPT="${INSTALLERS_DIR}/../../packages/${INSTALLER}/$(echo ${PROGRAM} | sed -e 's/\//_/')-configure.sh"
+  local INSTALL_SCRIPT="${INSTALLERS_DIR}/../packages/${INSTALLER}/$(echo ${PROGRAM} | sed -e 's/\//_/')-install.sh"
+  local CONFIGURE_SCRIPT="${INSTALLERS_DIR}/../packages/${INSTALLER}/$(echo ${PROGRAM} | sed -e 's/\//_/')-configure.sh"
 
   # install via custom script
   if [ -f "${INSTALL_SCRIPT}" ]; then
