@@ -72,5 +72,5 @@ packages:
   - name: groovy
     installer: sdk
     version: 3.0.6
-#  - name: aws-sso-credential-process
-#    installer: pipx
+  - name: aws-sso-credential-process
+    installer: pipx

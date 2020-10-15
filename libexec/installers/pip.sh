@@ -14,7 +14,9 @@ pip_get_current_version() {
 
 pip_get_latest_version() {
   local PROGRAM=$1 && shift
-  pip3 install "${PROGRAM}==" 2>&1 | tr ', ' "\n" | sort -n | tail -1
+  set +euE +o pipefail
+  pip3 install "${PROGRAM}==" 2>&1 | sed -E 's/.*from versions: (.*)\)/\1/' | head -n 1 | tr ', ' "\n" | sort -n | tail -1
+  set -euE -o pipefail
 }
 
 pip_install_or_upgrade_package() {

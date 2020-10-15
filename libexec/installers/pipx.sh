@@ -10,12 +10,14 @@ pipx_install() {
 
 pipx_get_current_version() {
   local PROGRAM=$1 && shift
-  pipx show ${PROGRAM} | grep Version: | cut -d' ' -f2
+  pipx list | grep "package ${PROGRAM}" | cut -d' ' -f6 | cut -d',' -f1
 }
 
 pipx_get_latest_version() {
   local PROGRAM=$1 && shift
-  pipx install "${PROGRAM}==" 2>&1 | tr ', ' "\n" | sort -n | tail -1
+  set +euE +o pipefail
+  pipx install --force "${PROGRAM}==" 2>&1 | sed -E 's/.*from versions: (.*)\)/\1/' | head -n 1 | tr ', ' "\n" | sort -n | tail -1
+  set -euE -o pipefail
 }
 
 pipx_install_or_upgrade_package() {
@@ -35,14 +37,12 @@ pipx_install_or_upgrade_package() {
 
   # check if we need to install
   if [ -z "${CURRENT_VERSION}" ]; then
-
     log_info "⚠️  ${DFQN} is not installed, installing..."
     pipx install "${PROGRAM}==${DESIRED_VERSION}"
     log_info "✅ ${DFQN} installed."
 
   # check if we need to change
   elif [ "${DESIRED_VERSION}" != "${CURRENT_VERSION}" ]; then
-
     log_info "⚠️  Current version (${CFQN}) does not match desired version (${DFQN}), updating..."
     pipx install "${PROGRAM}==${DESIRED_VERSION}"
     log_info "✅ ${DFQN} installed."
