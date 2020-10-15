@@ -22,7 +22,7 @@ DIR="$(dirname "$(greadlink -f "$0")")"
 source ${DIR}/../libexec/install.sh
 
 # Arguments
-ACTION=$(parse_arg 'ACTION' 1 'install' "$@")
+ACTION=$(parse_arg 'ACTION' 1 'install|help' "$@")
 DRY_RUN=$(parse_long_opt 'dry-run' 'true' "$@")
 CONFIG=$(parse_long_opt 'config' '' "$@")
 CONFIG=${CONFIG:-"vulcan-config.yml"}
@@ -34,5 +34,8 @@ LOGLEVEL=${LOGLEVEL:-"INFO"}
 case "${ACTION}" in
     install)
         install_from_config "${CONFIG}"
+        ;;
+    help)
+        echo "${USAGE}"
         ;;
 esac
