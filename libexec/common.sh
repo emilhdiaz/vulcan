@@ -41,6 +41,32 @@ get_github_latest_release() {
   curl --silent "https://api.github.com/repos/$REPO/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'
 }
 
+get_os() {
+  local OS
+
+  if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    OS="darwin"
+  elif [[ "$OSTYPE" == "darwin"* ]]; then
+    OS="darwin"
+  else
+    log_error "The '$OSTYPE' operating system is not supported" && exit 1
+  fi
+  echo "${OS}"
+}
+
+get_default_os_package_manager() {
+  local PM
+
+  if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    PM="brew"
+  elif [[ "$OSTYPE" == "darwin"* ]]; then
+    PM="brew"
+  else
+    log_error "The '$OSTYPE' operating system is not supported" && exit 1
+  fi
+  echo "${PM}"
+}
+
 get_shell_rc_file() {
 : <<DOC
 Determine the appropriate init script for your default interactive shell

@@ -10,7 +10,7 @@ source ${INSTALLERS_DIR}/nvm.sh
 source ${INSTALLERS_DIR}/pyenv.sh
 source ${INSTALLERS_DIR}/tfenv.sh
 
-darwin_install_or_upgrade_installer() {
+install_or_upgrade_installer() {
   local INSTALLER=$1 && shift
 
   if [ -n "${DRY_RUN}" ]; then
@@ -68,7 +68,7 @@ darwin_install_or_upgrade_installer() {
   fi
 }
 
-darwin_install_or_upgrade_package() {
+install_or_upgrade_package() {
   local INSTALLER=$1 && shift
   local PROGRAM=$1 && shift
   local VERSION=${1:-}

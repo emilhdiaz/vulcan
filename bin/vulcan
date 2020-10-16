@@ -8,7 +8,10 @@ USAGE="
 Usage: $(basename $0) ACTION [OPTIONS]
 
 ACTIONS:
-  install                       Installs development tools
+  install                       Installs all development tools specified in the vulcan-config.yml
+    --only-installers           Installs only the intallers specified in the vulcan-config.yml
+    --only-installers           Installs only the packages specified in the vulcan-config.yml
+  list-installers               Prints the list of installers specified in the vulcan-config.yml
   help                          Prints this usage menu
 
 Global Options:
@@ -22,7 +25,7 @@ DIR="$(dirname "$(greadlink -f "$0")")"
 source ${DIR}/../libexec/install.sh
 
 # Arguments
-ACTION=$(parse_arg 'ACTION' 1 'install|help' "$@")
+ACTION=$(parse_arg 'ACTION' 1 'install|list-installers|help' "$@")
 DRY_RUN=$(parse_long_opt 'dry-run' 'true' "$@")
 CONFIG=$(parse_long_opt 'config' '' "$@")
 CONFIG=${CONFIG:-"vulcan-config.yml"}
@@ -33,7 +36,20 @@ LOGLEVEL=${LOGLEVEL:-"INFO"}
 
 case "${ACTION}" in
     install)
-        install_from_config "${CONFIG}"
+        ONLY_INSTALLERS=$(parse_long_opt 'only-installers' 'true' "$@")
+        ONLY_PACKAGES=$(parse_long_opt 'only-packages' 'true' "$@")
+
+        if [ -n "${ONLY_INSTALLERS}" ]; then
+          install_installers_from_config "${CONFIG}";
+        elif [ -n "${ONLY_PACKAGES}" ]; then
+          install_packages_from_config "${CONFIG}"
+        else
+          install_all_from_config "${CONFIG}"
+        fi
+
+        ;;
+    list-installers)
+        list_installers_from_config "${CONFIG}"
         ;;
     help)
         echo "${USAGE}"
