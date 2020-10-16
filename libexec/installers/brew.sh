@@ -29,7 +29,7 @@ brew_get_latest_formula() {
 brew_get_current_version() {
   local PROGRAM=$1 && shift
   PROGRAM=$(brew info --json "${PROGRAM}" | jq -r '.[].name')
-  brew list --versions | grep "^${PROGRAM}[@ ]" | head -n 1 | cut -d' ' -f2
+  brew list --versions | grep "^${PROGRAM}[@ ]" | head -n 1 | cut -d' ' -f2- | tr ' ' '\n' | sort -nr | head -n 1
 }
 
 brew_get_latest_version() {
