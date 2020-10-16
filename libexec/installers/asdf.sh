@@ -25,9 +25,10 @@ asdf_install_or_upgrade_package() {
   local DESIRED_VERSION=${1:-latest}
   local CURRENT_VERSION=$(asdf_get_current_version "${PROGRAM}")
   local PLUGIN=$(parse_long_opt 'plugin' '' "$@")
+  local PRE_INSTALL_HOOK=$(parse_long_opt 'pre-install-hook' '' "$@")
 
   # check if we need to register plugin
-  if ! (asdf plugin list | grep ${PROGRAM} > /dev/null 2>&1); then
+  if ! (asdf plugin list | grep "${PROGRAM}" > /dev/null 2>&1); then
     log_info "ℹ️️  Installing plugin repository ${PROGRAM} (${PLUGIN})..."
     asdf plugin add "${PROGRAM}" "${PLUGIN}"
   fi
@@ -42,6 +43,8 @@ asdf_install_or_upgrade_package() {
 
   # check if we need to install
   if [ -z "${CURRENT_VERSION}" ]; then
+
+    [ -z "${PRE_INSTALL_HOOK}" ] && bash -c "${PRE_INSTALL_HOOK}" > /dev/null 2>&1
 
     log_info "⚠️  ${DFQN} is not installed, installing..."
     asdf install "${PROGRAM}" "${DESIRED_VERSION}"
