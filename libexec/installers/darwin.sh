@@ -54,8 +54,15 @@ darwin_install_or_upgrade_installer() {
 
   # configure the shell if necessary
   if [ -f "${CONFIGURE_SCRIPT}" ]; then
+    local RC_FILE=$(get_shell_rc_file)
+
+    if ! (grep "${CONFIGURE_SCRIPT}" ${RC_FILE} > /dev/null 2>&1); then
+      log_info "Adding ${INSTALLER} to ${RC_FILE}"
+      echo "\n[ -f '${CONFIGURE_SCRIPT}' ] && source '${CONFIGURE_SCRIPT}';" >> ${RC_FILE}
+    fi
+
     set +euE +o pipefail
-    . "${CONFIGURE_SCRIPT}"
+    source "${CONFIGURE_SCRIPT}"
     log_info "✅ shell configured."
     set -euE -o pipefail
   fi
@@ -112,8 +119,15 @@ darwin_install_or_upgrade_package() {
 
   # configure the shell if necessary
   if [ -f "${CONFIGURE_SCRIPT}" ]; then
+    local RC_FILE=$(get_shell_rc_file)
+
+    if ! (grep "${CONFIGURE_SCRIPT}" ${RC_FILE} > /dev/null 2>&1); then
+      log_info "Adding ${PROGRAM} to ${RC_FILE}"
+      echo "\n[ -f '${CONFIGURE_SCRIPT}' ] && source '${CONFIGURE_SCRIPT}';" >> ${RC_FILE}
+    fi
+
     set +euE +o pipefail
-    . "${CONFIGURE_SCRIPT}"
+    source "${CONFIGURE_SCRIPT}"
     log_info "✅ shell configured."
     set -euE -o pipefail
   fi
