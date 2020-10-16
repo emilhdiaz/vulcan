@@ -41,9 +41,16 @@ brew_install_or_upgrade_package() {
   require_tool brew
 
   local PROGRAM=$1 && shift
+  local TAP=$(parse_long_opt 'tap' '' "$@")
   local DESIRED_FORMULA=${1:-latest}
   local CURRENT_VERSION=$(brew_get_current_version "${PROGRAM}")
   local DESIRED_VERSION=${CURRENT_VERSION}
+
+  # check if we need to register plugin
+  if [ -n "${TAP}" ] &&  ! (brew tap | grep "${TAP}" > /dev/null 2>&1); then
+    log_info "ℹ️️  Installing homebrew tap ${TAP}..."
+    brew tap "${TAP}"
+  fi
 
   # resolve "latest" version
   if [[ "$DESIRED_FORMULA" == "latest" ]]; then

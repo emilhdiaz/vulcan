@@ -72,6 +72,7 @@ darwin_install_or_upgrade_package() {
   local INSTALLER=$1 && shift
   local PROGRAM=$1 && shift
   local VERSION=${1:-}
+  local TAP=$(parse_long_opt 'tap' '' "$@")
 
   if [ -n "${DRY_RUN}" ]; then
     return
@@ -86,7 +87,7 @@ darwin_install_or_upgrade_package() {
 
   # install via brew
   elif [[ "$INSTALLER" == "brew" ]]; then
-    brew_install_or_upgrade_package "${PROGRAM}" "${VERSION}"
+    brew_install_or_upgrade_package "${PROGRAM}" "${VERSION}" $([ -n "${TAP}" ] && echo "--tap ${TAP}")
 
   # install via asdf
   elif [[ "$INSTALLER" == "asdf" ]]; then
