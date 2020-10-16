@@ -6,6 +6,7 @@ source ${INSTALLERS_DIR}/brew.sh
 
 pipx_install() {
   brew_install_or_upgrade_package pipx
+  pipx ensurepath > /dev/null 2>&1
 }
 
 pipx_get_current_version() {
