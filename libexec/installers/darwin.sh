@@ -102,7 +102,7 @@ darwin_install_or_upgrade_package() {
 
   # install via nvm
   elif [[ "$INSTALLER" == "nvm" ]]; then
-    nvm_install_or_upgrade_package "${VERSION}"
+    nvm_install_or_upgrade_version "${VERSION}"
 
   # install via pyenv
   elif [[ "$INSTALLER" == "pyenv" ]]; then
