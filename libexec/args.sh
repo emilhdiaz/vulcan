@@ -54,38 +54,44 @@ DOC
     local OPT=$1 && shift
     local VALUES=$1 && shift
     local ARGS=("$@")
-    local OPT_IDX=
-    local VAL_IDX=
-    local VAL=
+    local OPT_IDX
+    local VAL_IDX
+    local VAL
+
     # identify the position of the option
     regexp="--${OPT}"
-    for i in {1..$#argv}; do
-       [[ ${argv[i]} =~ $regexp ]] && OPT_IDX=${i} && break
+    for i in {1..$#ARGS}; do
+       [[ ${ARGS[@]:$i-1:1} =~ $regexp ]] && OPT_IDX=${i} && break
     done
+
     # if not found, then set val to null
     if [[ -z "${OPT_IDX}" ]]; then
         VAL=
+
     # else if option is a boolean, then value is just "true"
     elif [[ "${VALUES}" == "true" ]]; then
         VAL="true"
+
     # else if format [opt=val], then attempt to get value from splitting on the '='
-    elif [[ ${argv[OPT_IDX]} =~ ^(.*)=(.*)$ ]]; then
-        VAL=${argv[OPT_IDX]#*=}
+    elif [[ ${ARGS[OPT_IDX]} =~ ^(.*)=(.*)$ ]]; then
+        VAL=${ARGS[OPT_IDX]#*=}
         # check if no value was supplied
         if [[ -z ${VAL} ]]; then
             log_error "Option '--${OPT}' requires a value to be supplied"
             return 1
         fi
+
     # else (format [opt val]), attempt then grab value from next positional argument
     else
         VAL_IDX=$((OPT_IDX+1))
-        VAL=${argv[VAL_IDX]}
+        VAL=${ARGS[VAL_IDX]}
         # check if no value was supplied
         if [[ ${VAL} =~ ^\- ]] || [[ -z ${VAL} ]]; then
             log_error "Option '--${OPT}' requires a value to be supplied"
             return 1
         fi
     fi
+
     # check value against range of acceptable values
     if [[ ! -z ${VAL} ]] && [[ ! -z "${VALUES}" ]]; then
         declare a=("${(@s/|/)VALUES}")
@@ -94,6 +100,10 @@ DOC
             return 1
         fi
     fi
-    echo ${VAL}
+
+#    echo "args='${ARGS}'" 1>&2
+#    echo "opt='${OPT}', idx='${OPT_IDX}', val='${VAL}'" 1>&2
+
+    echo "${VAL}"
     return 0
 }
