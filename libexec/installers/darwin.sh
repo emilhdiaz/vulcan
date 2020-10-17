@@ -111,7 +111,7 @@ install_or_upgrade_package() {
 
   # install via tfenv
   elif [[ "$INSTALLER" == "tfenv" ]]; then
-    tfenv_install_or_upgrade_package "${VERSION}"
+    tfenv_install_or_upgrade_version "${VERSION}"
 
   # package manager not supported
   else
