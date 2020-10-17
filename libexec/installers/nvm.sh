@@ -6,7 +6,6 @@ source ${INSTALLERS_DIR}/brew.sh
 
 nvm_install() {
   brew_install_or_upgrade_package nvm
-  mkdir -p "${NVM_DIR}"
 }
 
 nvm_install_or_upgrade_version() {
