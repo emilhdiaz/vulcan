@@ -73,7 +73,7 @@ Determine the appropriate init script for your default interactive shell
 --------------------------------------------------------------------------------
 DOC
 
-  set +eu;
+  set +eu
   local RC_FILE="$HOME/.bash_profile"
   if [ -f "$HOME/.rc" ]; then
     RC_FILE="$HOME/.rc"
@@ -87,7 +87,7 @@ DOC
 
   touch ${RC_FILE}
   echo ${RC_FILE}
-  set -eu;
+  set -eu
 
   return 0
 }

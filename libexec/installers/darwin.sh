@@ -61,10 +61,10 @@ install_or_upgrade_installer() {
       echo "\n[ -f '${CONFIGURE_SCRIPT}' ] && source '${CONFIGURE_SCRIPT}';" >> ${RC_FILE}
     fi
 
-    set +euE +o pipefail
+    set +eu
     source "${CONFIGURE_SCRIPT}"
+    set -eu
     log_info "✅ shell configured."
-    set -euE -o pipefail
   fi
 }
 
@@ -123,13 +123,13 @@ install_or_upgrade_package() {
     local RC_FILE=$(get_shell_rc_file)
 
     if ! (grep "${CONFIGURE_SCRIPT}" ${RC_FILE} > /dev/null 2>&1); then
-      log_info "Adding ${PROGRAM} to ${RC_FILE}"
+      log_info "Adding ${CONFIGURE_SCRIPT} to ${RC_FILE}"
       echo "\n[ -f '${CONFIGURE_SCRIPT}' ] && source '${CONFIGURE_SCRIPT}';" >> ${RC_FILE}
     fi
 
-    set +euE +o pipefail
+    set +eu
     source "${CONFIGURE_SCRIPT}"
+    set -eu
     log_info "✅ shell configured."
-    set -euE -o pipefail
   fi
 }

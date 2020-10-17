@@ -16,9 +16,9 @@ pipx_get_current_version() {
 
 pipx_get_latest_version() {
   local PROGRAM=$1 && shift
-  set +euE +o pipefail
+  set +eu
   pipx install --force "${PROGRAM}==" 2>&1 | sed -E 's/.*from versions: (.*)\)/\1/' | head -n 1 | tr ', ' "\n" | sort -n | tail -1
-  set -euE -o pipefail
+  set -eu
 }
 
 pipx_install_or_upgrade_package() {

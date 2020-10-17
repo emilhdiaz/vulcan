@@ -30,7 +30,7 @@ sdk_get_latest_version() {
 }
 
 sdk_install_or_upgrade_package() {
-  set +euE +o pipefail
+  set +eu
 
   require_tool sdk
 
@@ -67,5 +67,5 @@ sdk_install_or_upgrade_package() {
     log_info "✅ ${DFQN} is already installed."
   fi
 
-  set -euE -o pipefail
+  set -eu
 }
