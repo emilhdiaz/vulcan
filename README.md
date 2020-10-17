@@ -9,8 +9,23 @@ The main interface is through a CLI tool called `vulcan`, which will automatical
 
 ## Pre-requisites
 
-At minimum the Mac OSX environment should have [homebrew](https://brew.sh) and [yq](https://github.com/mikefarah/yq) 
-installed. 
+Currently `vulcan` is only supported for the `zsh` shell. 
+
+#### MacOx
+At minimum the Mac OSX environment should have [homebrew](https://brew.sh) and the following packages pre-installed: 
+* [coreutils](https://formulae.brew.sh/formula/coreutils)
+* [curl](https://formulae.brew.sh/formula/curl) 
+* [yq](https://github.com/mikefarah/yq)
+* [jq](https://formulae.brew.sh/formula/jq) 
+
+
+#### Debian Linux
+At minimum the Debian environment should have [apt-get](https://help.ubuntu.com/community/AptGet/Howto) and the 
+following packages pre-installed:
+* [coreutils](https://packages.ubuntu.com/focal/coreutils)
+* [curl](https://packages.ubuntu.com/focal/curl)
+* [yq](https://github.com/mikefarah/yq)
+* [jq](https://packages.ubuntu.com/focal/jq) 
 
 
 ## Usage 
