@@ -67,6 +67,7 @@ install_packages_from_config() {
     local INSTALLER=${INSTALLER:-$(get_default_os_package_manager)}
     local VERSION=$(yq r "${CONFIG}" "packages[$_i].version")
     local TAP=$(yq r "${CONFIG}" "packages[$_i].tap")
+    local TAP_URL=$(yq r "${CONFIG}" "packages[$_i].tap-url")
 
     log_info "Found package ${YELLOW}${INSTALLER}:${PACKAGE}@${VERSION}${NC} in configuration file"
 
@@ -77,7 +78,9 @@ install_packages_from_config() {
       install_or_upgrade_package "$(get_default_os_package_manager)" "${REQUIRED_PACKAGE}"
     done
 
-    install_or_upgrade_package "${INSTALLER}" "${PACKAGE}" "${VERSION}" $([ -n "${TAP}" ] && echo "--tap ${TAP}")
+    install_or_upgrade_package "${INSTALLER}" "${PACKAGE}" "${VERSION}" \
+      $([ -n "${TAP}" ] && echo "--tap ${TAP}") \
+      $([ -n "${TAP_URL}" ] && echo "--tap-url ${TAP_URL}")
     echo "\n"
   done
 }

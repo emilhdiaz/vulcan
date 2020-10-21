@@ -73,6 +73,7 @@ install_or_upgrade_package() {
   local PROGRAM=$1 && shift
   local VERSION=${1:-}
   local TAP=$(parse_long_opt 'tap' '' "$@")
+  local TAP_URL=$(parse_long_opt 'tap-url' '' "$@")
 
   if [ -n "${DRY_RUN}" ]; then
     return
@@ -87,7 +88,9 @@ install_or_upgrade_package() {
 
   # install via brew
   elif [[ "$INSTALLER" == "brew" ]]; then
-    brew_install_or_upgrade_package "${PROGRAM}" "${VERSION}" $([ -n "${TAP}" ] && echo "--tap ${TAP}")
+    brew_install_or_upgrade_package "${PROGRAM}" "${VERSION}" \
+      $([ -n "${TAP}" ] && echo "--tap ${TAP}") \
+      $([ -n "${TAP_URL}" ] && echo "--tap-url ${TAP_URL}")
 
   # install via asdf
   elif [[ "$INSTALLER" == "asdf" ]]; then
