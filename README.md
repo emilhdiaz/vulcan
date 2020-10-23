@@ -111,7 +111,7 @@ brew install vulcan
 Via Docker:
 ```bash
 docker pull emilhdiaz/vulcan
-docker run -it --rm emilhdiaz/vulcan -- --help
+docker run -it --rm emilhdiaz/vulcan
 ```
 
 Manually (replace *<DIR>* below with the directory you'd like to clone the repository into):
