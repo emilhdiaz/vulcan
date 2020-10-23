@@ -114,7 +114,7 @@ docker pull emilhdiaz/vulcan
 docker run -it --rm emilhdiaz/vulcan
 ```
 
-Manually (replace *<DIR>* below with the directory you'd like to clone the repository into):
+Manually (replace `<DIR>` below with the directory you'd like to clone the repository into):
 ```bash
 # Step 1 - Clone this repository
 git clone https://github.com/emilhdiaz/vulcan.git <DIR>
