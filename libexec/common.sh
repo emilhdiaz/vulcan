@@ -1,6 +1,6 @@
-INCLUDE_DIR="$( cd "$( dirname "${(%):-%x}" )" >/dev/null 2>&1 && pwd )"
-source ${INCLUDE_DIR}/args.sh
-source ${INCLUDE_DIR}/logs.sh
+LIBEXEC_DIR="$(dirname "$(greadlink -f "$0")")"
+source ${LIBEXEC_DIR}/logs.sh
+source ${LIBEXEC_DIR}/args.sh
 
 rr() {
   find $1 -name "$2" -type f

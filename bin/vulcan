@@ -24,16 +24,20 @@ Global Options:
 DIR="$(dirname "$(greadlink -f "$0")")"
 source ${DIR}/../libexec/install.sh
 
-# Arguments
-ACTION=$(parse_arg 'ACTION' 1 'install|list-installers|help' "$@")
-DRY_RUN=$(parse_long_opt 'dry-run' 'true' "$@")
-CONFIG=$(parse_long_opt 'config' '' "$@")
-CONFIG=${CONFIG:-"vulcan-config.yml"}
+# Set Log Level
 LOGLEVEL=$(parse_long_opt 'log-level' '' "$@")
 LOGLEVEL=${LOGLEVEL:-"INFO"}
 
-# Run the desired command
+# Arguments
+ACTION=$(parse_arg 'ACTION' 1 'install|list-installers|help' "$@")
 
+CONFIG=$(parse_long_opt 'config' '' "$@")
+CONFIG=${CONFIG:-"vulcan-config.yml"}
+
+DRY_RUN=$(parse_long_opt 'dry-run' 'true' "$@")
+
+
+# Run the desired command
 case "${ACTION}" in
     install)
         ONLY_INSTALLERS=$(parse_long_opt 'only-installers' 'true' "$@")

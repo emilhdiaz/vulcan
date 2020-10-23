@@ -1,9 +1,9 @@
 #!/usr/bin/env zsh
 
-_DIR="$( cd "$( dirname "${(%):-%x}" )" >/dev/null 2>&1 && pwd )"
-source ${_DIR}/common.sh
-source ${_DIR}/installers/asdf.sh
-source ${_DIR}/installers/brew.sh
+LIBEXEC_DIR="$(dirname "$(greadlink -f "$0")")"
+source ${LIBEXEC_DIR}/common.sh
+source ${LIBEXEC_DIR}/installers/asdf.sh
+source ${LIBEXEC_DIR}/installers/brew.sh
 
 
 list_installers_from_config() {
@@ -36,7 +36,7 @@ list_required_packages_from_config() {
 install_installers_from_config() {
   local CONFIG=$1
 
-  source "${_DIR}/installers/$(get_os).sh"
+  source "${LIBEXEC_DIR}/installers/$(get_os).sh"
 
   local INSTALLERS=( $(list_installers_from_config "${CONFIG}") )
   for INSTALLER in "${INSTALLERS[@]}"; do
@@ -58,7 +58,7 @@ install_packages_from_config() {
   local CONFIG=$1
   local COUNT=$(yq r "${CONFIG}" --length "packages")
 
-  source "${_DIR}/installers/$(get_os).sh"
+  source "${LIBEXEC_DIR}/installers/$(get_os).sh"
 
   local _i
   for ((_i=0; _i<=COUNT-1; _i++)); do

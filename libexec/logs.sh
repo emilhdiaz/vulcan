@@ -6,13 +6,23 @@ NC='\033[0m'
 
 timestamp() {
   current_time=$(date "+[%H:%M:%S]")
-  echo $current_time
+  echo "${current_time}"
+  return 0
+}
+
+log_success() {
+  local MESSAGE=$1 && shift
+  local LOGLEVELS=(SUCCESS)
+  if [[ ! ${LOGLEVELS[(ie)${LOGLEVEL}]} -le ${#LOGLEVELS} ]]; then
+    return 0
+  fi
+  echo "${GREEN}SUCCESS $(timestamp):${NC} ${MESSAGE}"
   return 0
 }
 
 log_info() {
   local MESSAGE=$1 && shift
-  local LOGLEVELS=(INFO)
+  local LOGLEVELS=(SUCCESS INFO)
   if [[ ! ${LOGLEVELS[(ie)${LOGLEVEL}]} -le ${#LOGLEVELS} ]]; then
     return 0
   fi
@@ -22,7 +32,7 @@ log_info() {
 
 log_warn() {
   local MESSAGE=$1 && shift
-  local LOGLEVELS=(INFO WARN)
+  local LOGLEVELS=(SUCCESS INFO WARN)
   if [[ ! ${LOGLEVELS[(ie)${LOGLEVEL}]} -le ${#LOGLEVELS} ]]; then
     return 0
   fi
@@ -32,7 +42,7 @@ log_warn() {
 
 log_error() {
   local MESSAGE=$1 && shift
-  local LOGLEVELS=(INFO WARN ERROR)
+  local LOGLEVELS=(SUCCESS INFO WARN ERROR)
   if [[ ! ${LOGLEVELS[(ie)${LOGLEVEL}]} -le ${#LOGLEVELS} ]]; then
     return 0
   fi

@@ -26,12 +26,15 @@ DOC
     local ARG=$1 && shift
     local IDX=$1 && shift
     local VALUES=$1 && shift
-    local VAL=${argv[IDX]}
+
     # check if no value was supplied
-    if [[ ${VAL} =~ ^\- ]] || [[ -z ${VAL} ]]; then
+    if [[ ! -v argv[IDX] ]]; then
         log_error "Argument '${ARG}' requires a value to be supplied"
         return 1
     fi
+
+    local VAL=${argv[IDX]}
+
     # check if value is in list of acceptable values
     if [[ ! -z "${VALUES}" ]]; then
         declare a=("${(@s/|/)VALUES}")
