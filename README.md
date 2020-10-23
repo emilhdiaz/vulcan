@@ -78,12 +78,16 @@ Currently Vulcan is only supported for the `zsh` shell and requires a native ins
 pre-installed on the machine.   
 
 ##### MacOx
-At minimum the Mac OSX environment should have [homebrew](https://brew.sh) and the following packages pre-installed: 
+At minimum the Mac OSX environment should have [homebrew](https://brew.sh) installed and the following packages pre-installed: 
 * [coreutils](https://formulae.brew.sh/formula/coreutils)
 * [curl](https://formulae.brew.sh/formula/curl) 
 * [yq](https://github.com/mikefarah/yq)
-* [jq](https://formulae.brew.sh/formula/jq) 
+* [jq](https://formulae.brew.sh/formula/jq)  
 
+All these dependencies can be found in the `Brewfile` found in this repo and installed with: 
+```bash
+brew bundle
+```
 
 ##### Debian Linux
 At minimum the Debian environment should have [apt-get](https://help.ubuntu.com/community/AptGet/Howto) and the 
@@ -96,16 +100,21 @@ following packages pre-installed:
 
 ## Installation
 
-Vulcan can be installed via homebrew: 
+Vulcan can be installed 
 
+Via Homebrew: 
 ```bash
 brew tap emilhdiaz/tap
 brew install vulcan
 ```
 
-Or, you can checkout this git repository locally and add the ./bin directory to your `PATH` environment variable at shell launch:
+Via Docker:
+```bash
+docker pull emilhdiaz/vulcan
+docker run -it --rm emilhdiaz/vulcan -- --help
+```
 
-Replace <DIR> below with the directory you'd like to clone the repository into
+Manually (replace *<DIR>* below with the directory you'd like to clone the repository into):
 ```bash
 # Step 1 - Clone this repository
 git clone https://github.com/emilhdiaz/vulcan.git <DIR>

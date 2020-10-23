@@ -1,0 +1,11 @@
+# Ignore everything by default
+*
+
+# Allow files and folders with a pattern starting with !
+!bin/*
+!libexec/**/*.sh
+
+!LICENSE
+!README.md
+!Brewfile
+!Brewfile.lock.json
