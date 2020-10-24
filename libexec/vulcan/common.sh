@@ -45,7 +45,7 @@ get_os() {
   local OS
 
   if [[ "$OSTYPE" == "linux-gnu" ]]; then
-    OS="darwin"
+    OS="linux"
   elif [[ "$OSTYPE" == "darwin"* ]]; then
     OS="darwin"
   else
@@ -58,7 +58,7 @@ get_default_os_package_manager() {
   local PM
 
   if [[ "$OSTYPE" == "linux-gnu" ]]; then
-    PM="brew"
+    PM="apt"
   elif [[ "$OSTYPE" == "darwin"* ]]; then
     PM="brew"
   else

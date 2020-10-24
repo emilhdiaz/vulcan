@@ -1,8 +1,9 @@
 #!/usr/bin/env zsh
 
-INSTALLERS_DIR="$( cd "$( dirname "${(%):-%x}" )" >/dev/null 2>&1 && pwd )"
+INSTALLERS_DIR="$(dirname "$(greadlink -f "$0")")"
 source ${INSTALLERS_DIR}/../common.sh
 source ${INSTALLERS_DIR}/brew.sh
+source ${INSTALLERS_DIR}/apt.sh
 source ${INSTALLERS_DIR}/asdf.sh
 source ${INSTALLERS_DIR}/sdk.sh
 source ${INSTALLERS_DIR}/pipx.sh
@@ -22,6 +23,10 @@ install_or_upgrade_installer() {
   # install via brew
   if [[ "$INSTALLER" == "brew" ]]; then
     brew_install
+
+  # install via apt
+  elif [[ "$INSTALLER" == "apt" ]]; then
+    apt_install
 
   # install via asdf
   elif [[ "$INSTALLER" == "asdf" ]]; then
@@ -91,6 +96,10 @@ install_or_upgrade_package() {
     brew_install_or_upgrade_package "${PROGRAM}" "${VERSION}" \
       $([ -n "${TAP}" ] && echo "--tap ${TAP}") \
       $([ -n "${TAP_URL}" ] && echo "--tap-url ${TAP_URL}")
+
+  # install via apt
+  elif [[ "$INSTALLER" == "apt" ]]; then
+    apt_install_or_upgrade_package "${PROGRAM}" "${VERSION}"
 
   # install via asdf
   elif [[ "$INSTALLER" == "asdf" ]]; then

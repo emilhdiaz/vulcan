@@ -22,7 +22,7 @@ Global Options:
 
 # Imports
 DIR="$(dirname "$(greadlink -f "$0")")"
-source ${DIR}/../libexec/install.sh
+source ${DIR}/../libexec/vulcan/install.sh
 
 # Set Log Level
 LOGLEVEL=$(parse_long_opt 'log-level' '' "$@")

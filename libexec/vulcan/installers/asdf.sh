@@ -2,10 +2,11 @@
 
 INSTALLERS_DIR="$( cd "$( dirname "${(%):-%x}" )" >/dev/null 2>&1 && pwd )"
 source ${INSTALLERS_DIR}/../common.sh
-source ${INSTALLERS_DIR}/brew.sh
 
 asdf_install() {
-  brew_install_or_upgrade_package asdf
+  ! command -v apt &> /dev/null && log_error "${DFQN} requires brew to be installed"
+
+  install_or_upgrade_package brew asdf
 }
 
 asdf_get_current_version() {
