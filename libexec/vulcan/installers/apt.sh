@@ -4,16 +4,31 @@ INSTALLERS_DIR="$( cd "$( dirname "${(%):-%x}" )" >/dev/null 2>&1 && pwd )"
 source ${INSTALLERS_DIR}/../common.sh
 
 apt_install() {
-  DFQN="${YELLOW}apt${NC}"
-  local OS=get_os
+  local DFQN="${YELLOW}apt${NC}"
+  local OS=$(get_os)
 
-  [ ! "$OS" == "linux" ] && log_error "${DFQN} is not supported on $OS"
-
-  if ! command -v apt &> /dev/null; then
-    log_error "${DFQN} is not installed, but it cannot be installed with vulcan"
-  else
+  if command -v apt-get &> /dev/null; then
     log_info "✅ ${DFQN} is already installed."
+    return 0
   fi
+
+  log_error "${DFQN} is not installed, but it cannot be installed with vulcan on ${OS} operating systems!"
+  return 1
+}
+
+apt_update() {
+  local DFQN="${YELLOW}apt${NC}"
+
+  if ! command -v apt-get &> /dev/null; then
+    log_error "${DFQN} is not installed!"
+    return 1
+  fi
+
+  apt-get update -y
+}
+
+apt_install_dependencies() {
+  return 0
 }
 
 apt_get_current_version() {

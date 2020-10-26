@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
 if [[ -s "${HOME}/.sdkman/bin/sdkman-init.sh" ]]; then
   export SDKMAN_DIR="${HOME}/.sdkman"

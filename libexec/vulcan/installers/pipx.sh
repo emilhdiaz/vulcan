@@ -5,7 +5,59 @@ source ${INSTALLERS_DIR}/../common.sh
 source ${INSTALLERS_DIR}/brew.sh
 
 pipx_install() {
-  brew_install_or_upgrade_package pipx
+  local DFQN="${YELLOW}pipx${NC}"
+  local OS=$(get_os)
+
+  if command -v pipx &> /dev/null; then
+    log_info "✅ ${DFQN} is already installed."
+    return 0
+  fi
+
+  log_info "⚠️  ${DFQN} is not installed, installing..."
+
+  # install via homebrew
+  if command -v brew &> /dev/null; then
+    (
+      LOGLEVEL=ERROR
+      install_or_upgrade_package brew pipx
+    )
+
+  # install via pip
+  elif command -v apt-get &> /dev/null; then
+    (
+      LOGLEVEL=ERROR
+      install_or_upgrade_package apt python3-venv
+      install_or_upgrade_package apt pipx
+    )
+
+  # cannot install
+  else
+    log_error "${DFQN} is not installed, but it cannot be installed with vulcan on ${OS} operating systems!"
+    return 1
+  fi
+
+  log_info "✅ ${DFQN} installed."
+}
+
+pipx_update() {
+  local DFQN="${YELLOW}pipx${NC}"
+
+  if ! command -v pipx &> /dev/null; then
+    log_error "${DFQN} is not installed!"
+    return 1
+  fi
+
+  if command -v brew &> /dev/null; then
+    (
+      LOGLEVEL=ERROR
+      install_or_upgrade_package brew pipx
+    )
+  elif command -v apt-get &> /dev/null; then
+    (
+      LOGLEVEL=ERROR
+      install_or_upgrade_package apt pipx
+    )
+  fi
 }
 
 pipx_get_current_version() {

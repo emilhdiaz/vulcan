@@ -5,14 +5,29 @@ source ${INSTALLERS_DIR}/../common.sh
 
 brew_install() {
   DFQN="${YELLOW}brew${NC}"
+  local OS=$(get_os)
+
+  if command -v brew &> /dev/null; then
+    log_info "✅ ${DFQN} is already installed."
+    return 0
+  fi
+
+  log_info "⚠️  ${DFQN} is not installed, installing..."
+
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+  log_info "✅ ${DFQN} installed."
+}
+
+brew_update() {
+  local DFQN="${YELLOW}brew${NC}"
 
   if ! command -v brew &> /dev/null; then
-    log_info "⚠️  ${DFQN} is not installed, installing..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-    log_info "✅ ${DFQN} installed."
-  else
-    log_info "✅ ${DFQN} is already installed."
+    log_error "${DFQN} is not installed!"
+    return 1
   fi
+
+  brew update
 }
 
 brew_get_current_formula() {

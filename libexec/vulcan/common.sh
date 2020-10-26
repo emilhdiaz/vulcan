@@ -45,7 +45,7 @@ get_os() {
   local OS
 
   if [[ "$OSTYPE" == "linux-gnu" ]]; then
-    OS="linux"
+    OS=$(cat /etc/os-release | grep ID_LIKE | cut -d'=' -f2)
   elif [[ "$OSTYPE" == "darwin"* ]]; then
     OS="darwin"
   else
@@ -56,10 +56,11 @@ get_os() {
 
 get_default_os_package_manager() {
   local PM
+  local OS=$(get_os)
 
-  if [[ "$OSTYPE" == "linux-gnu" ]]; then
+  if [[ "$OS" == "debian" ]]; then
     PM="apt"
-  elif [[ "$OSTYPE" == "darwin"* ]]; then
+  elif [[ "$OS" == "darwin" ]]; then
     PM="brew"
   else
     log_error "The '$OSTYPE' operating system is not supported" && exit 1
