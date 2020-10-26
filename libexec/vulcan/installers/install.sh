@@ -95,7 +95,7 @@ install_or_upgrade_package() {
 
   # install via custom script
   if [ -f "${INSTALL_SCRIPT}" ]; then
-    $SHELL "${INSTALL_SCRIPT}" "${VERSION}"
+    "${INSTALL_SCRIPT}" "${VERSION}"
 
   # install via brew
   elif [[ "$INSTALLER" == "brew" ]]; then
