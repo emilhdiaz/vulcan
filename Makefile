@@ -4,7 +4,7 @@ build: require-version build-deb build-docker
 push: require-version push-deb push-docker
 
 build-docker: require-version
-	docker build -t emilhdiaz/vulcan:$(VERSION) .
+	DOCKER_BUILDKIT=1 docker build -t emilhdiaz/vulcan:$(VERSION) .
 
 build-deb: require-version
 	fpm -s dir -t deb \
@@ -15,10 +15,12 @@ build-deb: require-version
 	--license MIT \
 	--prefix /usr \
 	--force \
+	--post-install ./libexec/vulcan/post-install.sh \
 	--depends coreutils \
 	--depends curl \
-	--depends yq \
 	--depends jq \
+	--depends git \
+	--depends zsh \
 	.
 
 push-docker: require-version build-docker
