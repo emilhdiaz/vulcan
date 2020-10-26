@@ -12,8 +12,6 @@ Sample configuration file:
    - name: nvm
    - name: pyenv
    - name: asdf
-     requires:
-       - unzip
  
  programs:
    - name: jq
@@ -42,8 +40,7 @@ Supported config directives:
  | Directive   | Description |
  | ----------- | ----------- |
  | .installers | A list of installers that need to be installed on this machine. Vulcan will decide the best way to install these installers. It may use the system's native installer or a custom installation script based on the recommendations of the installer's authors |
- | .installers.name | The name of the installer (currently supported: `brew`, `apt-get`, `asdf`, `sdk` (sdkman), `pipx`, `nvm`, `pyenv`, `tfenv` |
- | .installers.requires | A list of required OS packages that need to be pre-installed before this installer is installed. Vulcan will only use the native installer to install these dependencies | 
+ | .installers.name | The name of the installer (currently supported: `brew`, `apt-get`, `asdf`, `sdk` (sdkman), `pipx`, `nvm`, `pyenv`, `tfenv` | 
  | .programs | A list of programs (tools, packages) that need to be installed on this machine | 
  | .programs.name | The name of the program to install |
  | .programs.installer | The installer that should be used to install this program |
@@ -102,16 +99,16 @@ following packages pre-installed:
 
 Vulcan can be installed 
 
-Via Homebrew: 
+Via `brew`: 
 ```bash
 brew tap emilhdiaz/tap
 brew install vulcan
 ```
 
-Via Docker:
+Via `apt-get`: 
 ```bash
-docker pull emilhdiaz/vulcan
-docker run -it --rm emilhdiaz/vulcan
+brew tap emilhdiaz/tap
+brew install vulcan
 ```
 
 Manually (replace `<DIR>` below with the directory you'd like to clone the repository into):
@@ -127,6 +124,11 @@ apt-get install -y coreutils curl yq jq
 
 # Step 3 - Add to .bashrc / .zshrc / .profile
 export PATH="<DIR>/vulcan/bin:${PATH}"
+```
+
+A base image for Docker also exists:
+```bash
+FROM emilhdiaz/vulcan
 ```
 
 

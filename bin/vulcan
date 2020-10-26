@@ -10,7 +10,7 @@ Usage: $(basename $0) ACTION [OPTIONS]
 ACTIONS:
   install                       Installs all development tools specified in the vulcan-config.yml
     --only-installers           Installs only the intallers specified in the vulcan-config.yml
-    --only-installers           Installs only the packages specified in the vulcan-config.yml
+    --only-packages             Installs only the packages specified in the vulcan-config.yml
   list-installers               Prints the list of installers specified in the vulcan-config.yml
   help                          Prints this usage menu
 
