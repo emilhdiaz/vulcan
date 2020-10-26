@@ -18,7 +18,8 @@ install_or_upgrade_installer() {
     return
   fi
 
-  local CONFIGURE_SCRIPT="${INSTALLERS_DIR}/$(echo ${INSTALLER} | sed -e 's/\//_/')-configure.sh"
+  local CONFIGURE_SCRIPT=$(echo "${INSTALLER}" | sed -e 's/\//_/')"-configure.sh"
+  local CONFIGURE_SCRIPT_PATH="${INSTALLERS_DIR}/${CONFIGURE_SCRIPT}"
 
   # install via brew
   if [[ "$INSTALLER" == "brew" ]]; then
@@ -58,16 +59,20 @@ install_or_upgrade_installer() {
   fi
 
   # configure the shell if necessary
-  if [ -f "${CONFIGURE_SCRIPT}" ]; then
+  if [ -f "${CONFIGURE_SCRIPT_PATH}" ]; then
     local RC_FILE=$(get_shell_rc_file)
 
-    if ! (grep "${CONFIGURE_SCRIPT}" ${RC_FILE} > /dev/null 2>&1); then
-      log_info "Adding ${INSTALLER} to ${RC_FILE}"
-      echo "\n[ -f '${CONFIGURE_SCRIPT}' ] && source '${CONFIGURE_SCRIPT}';" >> ${RC_FILE}
+    # remove any prior configuration for this script
+    if (grep "${CONFIGURE_SCRIPT}" ${RC_FILE} > /dev/null 2>&1); then
+      sed -ie "/${CONFIGURE_SCRIPT}/d" "${RC_FILE}"
     fi
 
+    # install new configuration for this script
+    log_info "Adding ${INSTALLER} to ${RC_FILE}"
+    printf "[ -f '%s' ] && source '%s';\n" "${CONFIGURE_SCRIPT_PATH}" "${CONFIGURE_SCRIPT_PATH}" >> "${RC_FILE}"
+
     set +eu
-    source "${CONFIGURE_SCRIPT}"
+    source "${CONFIGURE_SCRIPT_PATH}"
     set -eu
     log_info "✅ shell configured."
   fi
@@ -85,7 +90,8 @@ install_or_upgrade_package() {
   fi
 
   local INSTALL_SCRIPT="${INSTALLERS_DIR}/../packages/${INSTALLER}/$(echo ${PROGRAM} | sed -e 's/\//_/')-install.sh"
-  local CONFIGURE_SCRIPT="${INSTALLERS_DIR}/../packages/${INSTALLER}/$(echo ${PROGRAM} | sed -e 's/\//_/')-configure.sh"
+  local CONFIGURE_SCRIPT="$(echo "${PROGRAM}" | sed -e 's/\//_/')-configure.sh"
+  local CONFIGURE_SCRIPT_PATH="${INSTALLERS_DIR}/../packages/${INSTALLER}/${CONFIGURE_SCRIPT}"
 
   # install via custom script
   if [ -f "${INSTALL_SCRIPT}" ]; then
@@ -131,16 +137,20 @@ install_or_upgrade_package() {
   fi
 
   # configure the shell if necessary
-  if [ -f "${CONFIGURE_SCRIPT}" ]; then
+  if [ -f "${CONFIGURE_SCRIPT_PATH}" ]; then
     local RC_FILE=$(get_shell_rc_file)
 
-    if ! (grep "${CONFIGURE_SCRIPT}" ${RC_FILE} > /dev/null 2>&1); then
-      log_info "Adding ${CONFIGURE_SCRIPT} to ${RC_FILE}"
-      echo "\n[ -f '${CONFIGURE_SCRIPT}' ] && source '${CONFIGURE_SCRIPT}';" >> ${RC_FILE}
+    # remove any prior configuration for this script
+    if (grep "${CONFIGURE_SCRIPT}" ${RC_FILE} > /dev/null 2>&1); then
+      sed -ie "/${CONFIGURE_SCRIPT}/d" "${RC_FILE}"
     fi
 
+    # install new configuration for this script
+    log_info "Adding ${INSTALLER} to ${RC_FILE}"
+    printf "[ -f '%s' ] && source '%s';\n" "${CONFIGURE_SCRIPT_PATH}" "${CONFIGURE_SCRIPT_PATH}" >> "${RC_FILE}"
+
     set +eu
-    source "${CONFIGURE_SCRIPT}"
+    source "${CONFIGURE_SCRIPT_PATH}"
     set -eu
     log_info "✅ shell configured."
   fi

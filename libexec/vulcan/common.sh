@@ -73,9 +73,8 @@ get_shell_rc_file() {
 Determine the appropriate init script for your default interactive shell
 --------------------------------------------------------------------------------
 DOC
-
+  local RC_FILE
   set +eu
-  local RC_FILE="$HOME/.bash_profile"
   if [ -f "$HOME/.rc" ]; then
     RC_FILE="$HOME/.rc"
 
@@ -84,11 +83,15 @@ DOC
 
   elif [ -n "$ZSH_VERSION" ]; then
     RC_FILE="$HOME/.zshrc"
-  fi
 
-  touch ${RC_FILE}
-  echo ${RC_FILE}
+  else
+    RC_FILE="$HOME/.bash_profile"
+  fi
   set -eu
+  RC_FILE=$(greadlink -f "$RC_FILE")
+
+  touch "${RC_FILE}"
+  echo "${RC_FILE}"
 
   return 0
 }
