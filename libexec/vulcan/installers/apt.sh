@@ -33,7 +33,9 @@ apt_install_dependencies() {
 
 apt_get_current_version() {
   local PROGRAM=$1 && shift
-  apt-cache policy "${PROGRAM}" | grep Installed: | cut -d' ' -f4
+  set +eu
+  apt-cache policy "${PROGRAM}" | grep Installed: | grep -v none | cut -d' ' -f4
+  set -eu
 }
 
 apt_get_latest_version() {
