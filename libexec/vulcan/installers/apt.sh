@@ -63,13 +63,13 @@ apt_install_or_upgrade_package() {
   # check if we need to install
   if [ -z "${CURRENT_VERSION}" ]; then
     log_info "⚠️  ${DFQN} is not installed, installing..."
-    apt-get install -y "${PROGRAM}=${DESIRED_VERSION}"
+    DEBIAN_FRONTEND=noninteractive apt-get install -qq "${PROGRAM}=${DESIRED_VERSION}"
     log_info "✅ ${DFQN} installed."
 
   # check if we need to change
   elif [ "${DESIRED_VERSION}" != "${CURRENT_VERSION}" ]; then
     log_info "⚠️  Current version (${CFQN}) does not match desired version (${DFQN}), updating..."
-    apt-get install -y --only-upgrade "${PROGRAM}=${DESIRED_VERSION}"
+    DEBIAN_FRONTEND=noninteractive apt-get install -qq --only-upgrade "${PROGRAM}=${DESIRED_VERSION}"
     log_info "✅ ${DFQN} installed."
 
   # already installed and right version
