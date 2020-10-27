@@ -26,6 +26,7 @@ pipx_install() {
   elif command -v apt-get &> /dev/null; then
     (
       LOGLEVEL=ERROR
+      install_or_upgrade_package apt python3-pip
       install_or_upgrade_package apt python3-venv
       install_or_upgrade_package apt pipx
     )

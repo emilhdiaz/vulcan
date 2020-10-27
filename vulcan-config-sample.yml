@@ -11,7 +11,7 @@ packages:
   - name: vim
   - name: wget
   - name: less
-  - name: tar
+  - name: gnu-tar
   - name: zip
   - name: unzip
   - name: curl
@@ -61,7 +61,6 @@ packages:
     version: 3.7.2
     requires:
       - bzip2
-      - libffi-dev
       - sqlite3
 
   ## pipx

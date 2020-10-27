@@ -7,6 +7,7 @@
 FROM ubuntu:20.04 as build-base
 
 WORKDIR /home
+
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
@@ -33,7 +34,7 @@ RUN apt-get install -qq curl \
     && rm -rf /var/lib/apt/lists/* \
     && echo "done"
 
-# Copy these lines to the stage that needs them
+# Copy these lines to the final-stage
 #COPY --from=build-zsh /usr/bin/zsh /usr/bin/zsh
 #COPY --from=build-zsh /root/.oh-my-zsh /root/.oh-my-zsh
 #COPY --from=build-zsh /root/.zshrc /root/.zshrc
@@ -69,9 +70,6 @@ RUN make VERSION=${VERSION} build-deb
 ###################################################################
 
 FROM build-base as final-dev
-
-WORKDIR /home
-ARG DEBIAN_FRONTEND=noninteractive
 
 COPY --from=build-vulcan /home/vulcan_0.0.1_amd64.deb /tmp/vulcan_amd64.deb
 
