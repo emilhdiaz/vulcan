@@ -77,15 +77,17 @@ asdf_install_or_upgrade_package() {
   require_tool asdf
 
   local PROGRAM=$1 && shift
+  local PLUGIN=$(parse_long_opt 'plugin' '' "$@")
+  local PLUGIN_URL=$(parse_long_opt 'plugin-url' '' "$@")
   local DESIRED_VERSION=${1:-latest}
   local CURRENT_VERSION=$(asdf_get_current_version "${PROGRAM}")
-  local PLUGIN=$(parse_long_opt 'plugin' '' "$@")
   local PRE_INSTALL_HOOK=$(parse_long_opt 'pre-install-hook' '' "$@")
 
   # check if we need to register plugin
   if ! (asdf plugin list | grep "${PROGRAM}" > /dev/null 2>&1); then
-    log_info "ℹ️️  Installing plugin repository ${PROGRAM} (${PLUGIN})..."
-    asdf plugin add "${PROGRAM}" "${PLUGIN}"
+    PLUGIN=${PLUGIN:-${PROGRAM}}
+    log_info "ℹ️️  Installing plugin repository ${PLUGIN} (${PLUGIN_URL})..."
+    asdf plugin add "${PLUGIN}" "${PLUGIN_URL}"
   fi
 
   # resolve "latest" version

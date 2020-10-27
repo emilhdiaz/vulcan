@@ -82,8 +82,6 @@ install_or_upgrade_package() {
   local INSTALLER=$1 && shift
   local PROGRAM=$1 && shift
   local VERSION=${1:-}
-  local TAP=$(parse_long_opt 'tap' '' "$@")
-  local TAP_URL=$(parse_long_opt 'tap-url' '' "$@")
 
   if [ -n "${DRY_RUN}" ]; then
     return
@@ -99,6 +97,8 @@ install_or_upgrade_package() {
 
   # install via brew
   elif [[ "$INSTALLER" == "brew" ]]; then
+    local TAP=$(parse_long_opt 'tap' '' "$@")
+    local TAP_URL=$(parse_long_opt 'tap-url' '' "$@")
     brew_install_or_upgrade_package "${PROGRAM}" "${VERSION}" \
       $([ -n "${TAP}" ] && echo "--tap ${TAP}") \
       $([ -n "${TAP_URL}" ] && echo "--tap-url ${TAP_URL}")
@@ -109,7 +109,11 @@ install_or_upgrade_package() {
 
   # install via asdf
   elif [[ "$INSTALLER" == "asdf" ]]; then
-    asdf_install_or_upgrade_package "${PROGRAM}" "${VERSION}"
+    local PLUGIN=$(parse_long_opt 'plugin' '' "$@")
+    local PLUGIN_URL=$(parse_long_opt 'plugin-url' '' "$@")
+    asdf_install_or_upgrade_package "${PROGRAM}" "${VERSION}" \
+      $([ -n "${PLUGIN}" ] && echo "--plugin ${PLUGIN}") \
+      $([ -n "${PLUGIN_URL}" ] && echo "--plugin-url ${PLUGIN_URL}")
 
   # install via sdk
   elif [[ "$INSTALLER" == "sdk" ]]; then

@@ -30,6 +30,7 @@ packages:
   - name: helmsman
     installer: asdf
     version: 3.4.4
+    plugin-url: https://github.com/jkrukoff-cb/asdf-helmsman.git
   - name: kubectl
     installer: asdf
     version: 1.19.2
