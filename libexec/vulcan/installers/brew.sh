@@ -1,8 +1,5 @@
 #!/usr/bin/env zsh
 
-INSTALLERS_DIR="$( cd "$( dirname "${(%):-%x}" )" >/dev/null 2>&1 && pwd )"
-source ${INSTALLERS_DIR}/../common.sh
-
 brew_install() {
   DFQN="${YELLOW}brew${NC}"
   local OS=$(get_os)
@@ -56,8 +53,8 @@ brew_install_or_upgrade_package() {
   require_tool brew
 
   local PROGRAM=$1 && shift
-  local TAP=$(parse_long_opt 'tap' '' "$@")
-  local TAP_URL=$(parse_long_opt 'tap-url' '' "$@")
+  local TAP=$(parse_long_opt 'tap' "$@")
+  local TAP_URL=$(parse_long_opt 'tap-url' "$@")
   local DESIRED_FORMULA=${1:-latest}
   local CURRENT_VERSION=$(brew_get_current_version "${PROGRAM}")
   local DESIRED_VERSION=${CURRENT_VERSION}

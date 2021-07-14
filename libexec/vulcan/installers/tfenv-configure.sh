@@ -1,11 +1,28 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
-TFENV_DIR="$HOME/.tfenv"
+SILENT=$1
+export TFENV_DIR="$HOME/.tfenv"
 
-[ -d "${TFENV_DIR}/bin" ] && export PATH="${TFENV_DIR}/bin:$PATH"
+# installed via homebrew
+if brew list tfenv &> /dev/null; then
+  INSTALL_DIR="$(brew --prefix tfenv)"
 
-if ! command -v tfenv &> /dev/null; then
+# installed manually
+elif [[ -f "$HOME/.tfenv/bin/tfenv" ]]; then
+  INSTALL_DIR="$HOME/.tfenv"
+  export PATH="${INSTALL_DIR}/bin:$PATH"
+
+# not installed
+else
   return 0
 fi
 
-echo "tfenv configured!"
+# we're done if no output is desired
+[ -n "$SILENT" ] && return 0
+
+# check if command loaded
+if ! command -v tfenv &> /dev/null; then
+  echo "Failed to initialize tfenv!" && return 1
+else
+  echo "Successfully initialized tfenv!" && return 0
+fi

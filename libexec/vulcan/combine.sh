@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 ROOT_DIR=$1
 BUILD_DIR="${ROOT_DIR}/build/bin"

@@ -1,7 +1,6 @@
 #!/usr/bin/env zsh
 
 INSTALLERS_DIR="$(dirname "$(greadlink -f "$0")")"
-source ${INSTALLERS_DIR}/../common.sh
 source ${INSTALLERS_DIR}/brew.sh
 source ${INSTALLERS_DIR}/apt.sh
 source ${INSTALLERS_DIR}/asdf.sh
@@ -72,7 +71,7 @@ install_or_upgrade_installer() {
     printf "[ -f '%s' ] && source '%s';\n" "${CONFIGURE_SCRIPT_PATH}" "${CONFIGURE_SCRIPT_PATH}" >> "${RC_FILE}"
 
     set +eu
-    source "${CONFIGURE_SCRIPT_PATH}"
+    source "${CONFIGURE_SCRIPT_PATH}" silent
     set -eu
     log_info "✅ shell configured."
   fi
@@ -82,6 +81,8 @@ install_or_upgrade_package() {
   local INSTALLER=$1 && shift
   local PROGRAM=$1 && shift
   local VERSION=${1:-}
+  local REPOSITORY=$(parse_long_opt 'repository' "$@")
+  local REPOSITORY_URL=$(parse_long_opt 'repository-url' "$@")
 
   if [ -n "${DRY_RUN}" ]; then
     return
@@ -97,11 +98,9 @@ install_or_upgrade_package() {
 
   # install via brew
   elif [[ "$INSTALLER" == "brew" ]]; then
-    local TAP=$(parse_long_opt 'tap' '' "$@")
-    local TAP_URL=$(parse_long_opt 'tap-url' '' "$@")
     brew_install_or_upgrade_package "${PROGRAM}" "${VERSION}" \
-      $([ -n "${TAP}" ] && echo "--tap ${TAP}") \
-      $([ -n "${TAP_URL}" ] && echo "--tap-url ${TAP_URL}")
+      $([ -n "${REPOSITORY}" ] && echo "--tap ${REPOSITORY}") \
+      $([ -n "${REPOSITORY_URL}" ] && echo "--tap-url ${REPOSITORY_URL}")
 
   # install via apt
   elif [[ "$INSTALLER" == "apt" ]]; then
@@ -109,11 +108,9 @@ install_or_upgrade_package() {
 
   # install via asdf
   elif [[ "$INSTALLER" == "asdf" ]]; then
-    local PLUGIN=$(parse_long_opt 'plugin' '' "$@")
-    local PLUGIN_URL=$(parse_long_opt 'plugin-url' '' "$@")
     asdf_install_or_upgrade_package "${PROGRAM}" "${VERSION}" \
-      $([ -n "${PLUGIN}" ] && echo "--plugin ${PLUGIN}") \
-      $([ -n "${PLUGIN_URL}" ] && echo "--plugin-url ${PLUGIN_URL}")
+      $([ -n "${REPOSITORY}" ] && echo "--plugin ${REPOSITORY}") \
+      $([ -n "${REPOSITORY_URL}" ] && echo "--plugin-url ${REPOSITORY_URL}")
 
   # install via sdk
   elif [[ "$INSTALLER" == "sdk" ]]; then
@@ -150,7 +147,7 @@ install_or_upgrade_package() {
     fi
 
     # install new configuration for this script
-    log_info "Adding ${INSTALLER} to ${RC_FILE}"
+    log_info "Adding ${PROGRAM} to ${RC_FILE}"
     printf "[ -f '%s' ] && source '%s';\n" "${CONFIGURE_SCRIPT_PATH}" "${CONFIGURE_SCRIPT_PATH}" >> "${RC_FILE}"
 
     set +eu

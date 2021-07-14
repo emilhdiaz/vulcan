@@ -1,9 +1,5 @@
 #!/usr/bin/env zsh
 
-INSTALLERS_DIR="$( cd "$( dirname "${(%):-%x}" )" >/dev/null 2>&1 && pwd )"
-source ${INSTALLERS_DIR}/../common.sh
-source ${INSTALLERS_DIR}/brew.sh
-
 tfenv_install() {
   local DFQN="${YELLOW}tfenv${NC}"
   local OS=$(get_os)
@@ -23,7 +19,7 @@ tfenv_install() {
       install_or_upgrade_package brew tfenv
     )
 
-  # install with the help of apt-get
+  # install manually with the help of apt-get and git
   elif command -v apt-get &> /dev/null; then
     (
       LOGLEVEL=ERROR

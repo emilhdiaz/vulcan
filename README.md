@@ -13,14 +13,14 @@ Sample configuration file:
    - name: pyenv
    - name: asdf
  
- programs:
+ packages:
    - name: jq
    - name: curl
    - name: awscli
    - name: direnv
    - name: vulcan
-     tap: emilhdiaz/tap
-     tap-url: https://github.com/emilhdiaz/homebre-tap.git
+     repository: emilhdiaz/tap
+     repository-url: https://github.com/emilhdiaz/homebre-tap.git
    - name: helm
      installer: asdf
      version: 3.3.4
@@ -41,13 +41,13 @@ Supported config directives:
  | ----------- | ----------- |
  | .installers | A list of installers that need to be installed on this machine. Vulcan will decide the best way to install these installers. It may use the system's native installer or a custom installation script based on the recommendations of the installer's authors |
  | .installers.name | The name of the installer (currently supported: `brew`, `apt-get`, `asdf`, `sdk` (sdkman), `pipx`, `nvm`, `pyenv`, `tfenv` | 
- | .programs | A list of programs (tools, packages) that need to be installed on this machine | 
- | .programs.name | The name of the program to install |
- | .programs.installer | The installer that should be used to install this program |
- | .programs.version | The specific version of this package to install and pin. Defaults to `latest`, which means that this package will always be updated to the latest version available |
- | .programs.requires | A list of required OS packages that need to be pre-installed before this program is installed. Vulcan will only use the native installer to install these dependencies |
- | .programs.tap | (Homebrew Only / Optional) - The custom Homebrew tap to use for this package |
- | .programs.tap-url | (Homebrew Only / Optional) - The custom Homebrew tap URL to use for this package |
+ | .packages | A list of packages (tools, libs, programming languages) that need to be installed on this machine | 
+ | .packages.name | The name of the packages to install |
+ | .packages.installer | The installer that should be used to install this packages |
+ | .packages.version | The specific version of this package to install and pin. Defaults to `latest`, which means that this package will always be updated to the latest version available |
+ | .packages.requires | A list of required OS packages that need to be pre-installed before this packages is installed. Vulcan will only use the native installer to install these dependencies |
+ | .packages.repository | (Homebrew & ASDF Only / Optional) - The custom Homebrew tap or ASDF plugin to use for this package |
+ | .packages.repository-url | (Homebrew &ASDF Only / Optional) - The custom Homebrew tap URL or ASDF plugin URL to use for this package |
  
 
 Selecting which installers to use: 
@@ -60,7 +60,7 @@ aims to provide!), we do have some recommendations:
   * `pyenv` - For Python
   * `nvm` - For NodeJS
   * `sdk` - For Java
-* For any other CLI tools or packages that you need a specific patch version, we recommend that you do not use the native installer (`brew | apt-get`) as it will not allow you to pin this level of specificity for the version. Instead, use an alternate installer that supports your package like `asdf`, `pipx`, `sdf`, or `tfenv`.
+* For any other CLI tools or packages that you need a specific patch version, we recommend that you do not use the native installer (`brew | apt-get`) as it will not allow you to pin this level of specificity for the version. Instead, use an alternate installer that supports your package like `asdf`, `pipx`, `sdk`, or `tfenv`.
 * *NOTE*: Vulcan exclusively focuses the installation and management of CLI tools. We do not recommend that you use Vulcan to manage application runtime dependencies. Those dependencies should continue to be managed installed through package managers such as `pip` (requirements.txt), `npm` (package.json), or `maven` (pom.xml). 
   
 The Vulcan CLI:
@@ -138,7 +138,7 @@ FROM emilhdiaz/vulcan
 Usage: vulcan ACTION [OPTIONS]
 
 ACTIONS:
-  install                       Installs all installers and programs as specified in the supplied vulcan configuration file
+  install                       Installs all installers and packages as specified in the supplied vulcan configuration file
   help                          Prints this usage menu
 
 

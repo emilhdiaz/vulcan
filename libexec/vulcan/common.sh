@@ -2,6 +2,10 @@ LIBEXEC_DIR="$(dirname "$(greadlink -f "$0")")"
 source ${LIBEXEC_DIR}/logs.sh
 source ${LIBEXEC_DIR}/args.sh
 
+yqv() {
+  yq e "$2" "$1" | sed -e 's/null//g'
+}
+
 rr() {
   find $1 -name "$2" -type f
 }

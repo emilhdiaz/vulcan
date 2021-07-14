@@ -1,9 +1,15 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
-if ! command -v pipx &> /dev/null; then
-  return 0
-fi
-
+SILENT=$1
+export PIPX_DIR="$HOME/.local"
 export PATH="${HOME}/.local/bin:$PATH"
 
-echo "pipx configured!"
+# we're done if no output is desired
+[ -n "$SILENT" ] && return 0
+
+# check if command loaded
+if ! command -v pipx &> /dev/null; then
+  echo "Failed to initialize pipx!" && return 1
+else
+  echo "Successfully initialized pipx!" && return 0
+fi

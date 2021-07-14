@@ -1,9 +1,5 @@
 #!/usr/bin/env zsh
 
-INSTALLERS_DIR="$( cd "$( dirname "${(%):-%x}" )" >/dev/null 2>&1 && pwd )"
-source ${INSTALLERS_DIR}/../common.sh
-source ${INSTALLERS_DIR}/brew.sh
-
 pyenv_install() {
   local DFQN="${YELLOW}pyenv${NC}"
   local OS=$(get_os)
@@ -19,11 +15,6 @@ pyenv_install() {
   if command -v brew &> /dev/null; then
     (
       LOGLEVEL=ERROR
-      install_or_upgrade_package brew xz
-      install_or_upgrade_package brew openssl
-      install_or_upgrade_package brew readline
-      install_or_upgrade_package brew sqlite3
-      install_or_upgrade_package brew zlib
       install_or_upgrade_package brew pyenv
       install_or_upgrade_package brew pyenv-virtualenv
     )

@@ -22,26 +22,27 @@ Global Options:
 
 # Imports
 DIR="$(dirname "$(greadlink -f "$0")")"
+source ${DIR}/../libexec/vulcan/common.sh
 source ${DIR}/../libexec/vulcan/install.sh
 
 # Set Log Level
-LOGLEVEL=$(parse_long_opt 'log-level' '' "$@")
+LOGLEVEL=$(parse_long_opt 'log-level' "$@")
 LOGLEVEL=${LOGLEVEL:-"INFO"}
 
 # Arguments
-ACTION=$(parse_arg 'ACTION' 1 'install|list-installers|help' "$@")
+ACTION=$(parse_arg 'ACTION' 1 "$@" --:allowed='install|list-installers|help')
 
-CONFIG=$(parse_long_opt 'config' '' "$@")
+CONFIG=$(parse_long_opt 'config' "$@")
 CONFIG=${CONFIG:-"vulcan-config.yml"}
 
-DRY_RUN=$(parse_long_opt 'dry-run' 'true' "$@")
+DRY_RUN=$(parse_long_opt 'dry-run' "$@" --:type=":BOOL:")
 
 
 # Run the desired command
 case "${ACTION}" in
     install)
-        ONLY_INSTALLERS=$(parse_long_opt 'only-installers' 'true' "$@")
-        ONLY_PACKAGES=$(parse_long_opt 'only-packages' 'true' "$@")
+        ONLY_INSTALLERS=$(parse_long_opt 'only-installers' --:type=":BOOL:" "$@")
+        ONLY_PACKAGES=$(parse_long_opt 'only-packages' --:type=":BOOL:" "$@")
 
         if [ -n "${ONLY_INSTALLERS}" ]; then
           install_installers_from_config "${CONFIG}";

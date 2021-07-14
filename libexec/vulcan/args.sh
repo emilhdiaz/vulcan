@@ -129,6 +129,7 @@ DOC
     [[ -n "${VAL}" ]] && echo "${VAL}" && return 0
     [[ "${DEFAULT}" != ':NONE:' ]] && echo "${DEFAULT}" && return 0
     [[ "${REQUIRED}" == ':TRUE:' ]] && log_error "Option '--${OPT}' requires a value to be supplied" && return 1
+    return 0
 }
 
 _strip_internal_long_opts() {

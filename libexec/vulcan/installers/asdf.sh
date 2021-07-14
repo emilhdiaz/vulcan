@@ -1,8 +1,5 @@
 #!/usr/bin/env zsh
 
-INSTALLERS_DIR="$( cd "$( dirname "${(%):-%x}" )" >/dev/null 2>&1 && pwd )"
-source ${INSTALLERS_DIR}/../common.sh
-
 asdf_install() {
   local DFQN="${YELLOW}asdf${NC}"
   local OS=$(get_os)
@@ -18,14 +15,10 @@ asdf_install() {
   if command -v brew &> /dev/null; then
     (
       LOGLEVEL=ERROR
-      install_or_upgrade_package brew coreutils
-      install_or_upgrade_package brew curl
-      install_or_upgrade_package brew git
-      install_or_upgrade_package brew unzip
       install_or_upgrade_package brew asdf
     )
 
-  # install with the help of apt-get
+  # install manually with the help of apt-get and git
   elif command -v apt-get &> /dev/null; then
     (
       LOGLEVEL=ERROR
@@ -33,7 +26,7 @@ asdf_install() {
       install_or_upgrade_package apt git
       install_or_upgrade_package apt unzip
       git clone -q https://github.com/asdf-vm/asdf.git "$HOME/.asdf"
-      cd "$HOME/.asdf"
+      cd "$HOME/.asdf" || return 1
       git checkout "$(git describe --abbrev=0 --tags)"
     )
 
@@ -77,11 +70,11 @@ asdf_install_or_upgrade_package() {
   require_tool asdf
 
   local PROGRAM=$1 && shift
-  local PLUGIN=$(parse_long_opt 'plugin' '' "$@")
-  local PLUGIN_URL=$(parse_long_opt 'plugin-url' '' "$@")
+  local PLUGIN=$(parse_long_opt 'plugin' "$@")
+  local PLUGIN_URL=$(parse_long_opt 'plugin-url' "$@")
   local DESIRED_VERSION=${1:-latest}
   local CURRENT_VERSION=$(asdf_get_current_version "${PROGRAM}")
-  local PRE_INSTALL_HOOK=$(parse_long_opt 'pre-install-hook' '' "$@")
+  local PRE_INSTALL_HOOK=$(parse_long_opt 'pre-install-hook' "$@")
 
   # check if we need to register plugin
   if ! (asdf plugin list | grep "${PROGRAM}" > /dev/null 2>&1); then

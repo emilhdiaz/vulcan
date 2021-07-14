@@ -1,8 +1,5 @@
 #!/usr/bin/env zsh
 
-INSTALLERS_DIR="$( cd "$( dirname "${(%):-%x}" )" >/dev/null 2>&1 && pwd )"
-source ${INSTALLERS_DIR}/../common.sh
-
 helm_plugin_install_or_upgrade_plugin() {
   require_tool helm
 

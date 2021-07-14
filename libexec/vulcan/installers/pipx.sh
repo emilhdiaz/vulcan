@@ -1,9 +1,5 @@
 #!/usr/bin/env zsh
 
-INSTALLERS_DIR="$( cd "$( dirname "${(%):-%x}" )" >/dev/null 2>&1 && pwd )"
-source ${INSTALLERS_DIR}/../common.sh
-source ${INSTALLERS_DIR}/brew.sh
-
 pipx_install() {
   local DFQN="${YELLOW}pipx${NC}"
   local OS=$(get_os)
@@ -22,7 +18,14 @@ pipx_install() {
       install_or_upgrade_package brew pipx
     )
 
-  # install via pip
+  # install via pip3
+  elif command -v pip3 &> /dev/null; then
+    (
+      LOGLEVEL=ERROR
+      install_or_upgrade_package pip pipx
+    )
+
+  # install via apt-get
   elif command -v apt-get &> /dev/null; then
     (
       LOGLEVEL=ERROR
@@ -69,7 +72,7 @@ pipx_get_current_version() {
 pipx_get_latest_version() {
   local PROGRAM=$1 && shift
   set +eu
-  pipx install --force "${PROGRAM}==" 2>&1 | sed -E 's/.*from versions: (.*)\)/\1/' | head -n 1 | tr ', ' "\n" | sort -n | tail -1
+  pipx install --force "${PROGRAM}==" 2>&1 | grep "from versions:" | sed -E 's/.*from versions: (.*)\)/\1/' | head -n 1 | tr ', ' "\n" | sort -n | tail -1
   set -eu
 }
 

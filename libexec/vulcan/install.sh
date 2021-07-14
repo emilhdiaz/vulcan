@@ -1,17 +1,16 @@
 #!/usr/bin/env zsh
 
 LIBEXEC_DIR="$(dirname "$(greadlink -f "$0")")"
-source ${LIBEXEC_DIR}/common.sh
 source ${LIBEXEC_DIR}/installers/install.sh
 
 list_installers_from_config() {
   local CONFIG=$1 && shift
   local INSTALLERS=()
-  local COUNT=$(yq r "${CONFIG}" --length "installers")
+  local COUNT=$(yqv "${CONFIG}" ".installers | length")
 
   local _i
   for ((_i=0; _i<=COUNT-1; _i++)); do
-    local INSTALLER=$(yq r "${CONFIG}" "installers[$_i].name")
+    local INSTALLER=$(yqv "${CONFIG}" ".installers[$_i].name")
     INSTALLERS+=("${INSTALLER}")
   done
   echo "${INSTALLERS[@]}"
@@ -21,11 +20,11 @@ list_required_packages_from_config() {
   local CONFIG=$1 && shift
   local YQ_PATH=$1
   local PACKAGES=()
-  local COUNT=$(yq r "${CONFIG}" --length "${YQ_PATH}.requires")
+  local COUNT=$(yqv "${CONFIG}" ".${YQ_PATH}.requires | length")
 
   local _i
   for ((_i=0; _i<=COUNT-1; _i++)); do
-    local PACKAGE=$(yq r "${CONFIG}" "${YQ_PATH}.requires[$_i]")
+    local PACKAGE=$(yqv "${CONFIG}" ".${YQ_PATH}.requires[$_i]")
     PACKAGES+=("${PACKAGE}")
   done
   echo "${PACKAGES[@]}"
@@ -52,16 +51,16 @@ install_installers_from_config() {
 
 install_packages_from_config() {
   local CONFIG=$1
-  local COUNT=$(yq r "${CONFIG}" --length "packages")
+  local COUNT=$(yqv "${CONFIG}" ".packages | length")
 
   local _i
   for ((_i=0; _i<=COUNT-1; _i++)); do
-    local PACKAGE=$(yq r "${CONFIG}" "packages[$_i].name")
-    local INSTALLER=$(yq r "${CONFIG}" "packages[$_i].installer")
+    local PACKAGE=$(yqv "${CONFIG}" ".packages[$_i].name")
+    local INSTALLER=$(yqv "${CONFIG}" ".packages[$_i].installer")
     local INSTALLER=${INSTALLER:-$(get_default_os_package_manager)}
-    local VERSION=$(yq r "${CONFIG}" "packages[$_i].version")
-    local TAP=$(yq r "${CONFIG}" "packages[$_i].tap")
-    local TAP_URL=$(yq r "${CONFIG}" "packages[$_i].tap-url")
+    local VERSION=$(yqv "${CONFIG}" ".packages[$_i].version")
+    local REPOSITORY=$(yqv "${CONFIG}" ".packages[$_i].repository")
+    local REPOSITORY_URL=$(yqv "${CONFIG}" ".packages[$_i].repository-url")
 
     log_info "Found package ${YELLOW}${INSTALLER}:${PACKAGE}@${VERSION}${NC} in configuration file"
 
@@ -73,8 +72,8 @@ install_packages_from_config() {
     done
 
     install_or_upgrade_package "${INSTALLER}" "${PACKAGE}" "${VERSION}" \
-      $([ -n "${TAP}" ] && echo "--tap ${TAP}") \
-      $([ -n "${TAP_URL}" ] && echo "--tap-url ${TAP_URL}")
+      $([ -n "${REPOSITORY}" ] && echo "--repository ${REPOSITORY}") \
+      $([ -n "${REPOSITORY_URL}" ] && echo "--repository-url '${REPOSITORY_URL}'")
     echo "\n"
   done
 }
